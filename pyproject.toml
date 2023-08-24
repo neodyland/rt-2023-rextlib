@@ -1,0 +1,17 @@
+[project]
+name = "rt-2023-rextlib"
+version = "0.1.0"
+dependencies = [
+    "aiomysql~=0.2.0",
+    "cryptography~=41.0.3",
+    "orjson~=3.9.5"
+]
+authors = [
+    {name = "AoHaru I/O", email = "support@aoharu.io"},
+]
+requires-python = ">=3.11"
+readme = "README.md"
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
