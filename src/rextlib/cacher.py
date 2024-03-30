@@ -1,6 +1,6 @@
-# rextlib - Cacher, キャッシュ管理
-
 from __future__ import annotations
+
+__all__ = ("Cache", "Cacher", "CacherPool")
 
 from typing import Generic, TypeVar, Any, Optional
 from collections.abc import Iterator, Callable, Hashable
@@ -9,10 +9,9 @@ from threading import Thread
 from time import time, sleep
 
 
-__all__ = ("Cache", "Cacher", "CacherPool")
-
-
 DataT = TypeVar("DataT")
+
+
 class Cache(Generic[DataT]):
     "キャッシュのデータを格納するためのクラスです。"
 
@@ -39,14 +38,17 @@ class Cache(Generic[DataT]):
 
 
 KeyT, ValueT = TypeVar("KeyT", bound=Hashable), TypeVar("ValueT")
+
+
 class Cacher(Generic[KeyT, ValueT]):
     "キャッシュを管理するためのクラスです。\n注意：引数`lifetime`を使用する場合は、CacherPoolと兼用しないとデータは自然消滅しません。"
 
     def __init__(
-        self, lifetime: Optional[float] = None,
+        self,
+        lifetime: Optional[float] = None,
         default: Optional[Callable[[], Any]] = None,
         on_dead: Callable[[KeyT, ValueT], Any] = lambda _, __: ...,
-        auto_update_deadline: bool = True
+        auto_update_deadline: bool = True,
     ):
         self.data: dict[KeyT, Cache[ValueT]] = {}
         self.lifetime, self.default = lifetime, default
@@ -64,8 +66,10 @@ class Cacher(Generic[KeyT, ValueT]):
     def set(self, key: KeyT, data: ValueT, lifetime: Optional[float] = None) -> None:
         "値を設定します。\n別のライフタイムを指定することができます。"
         self.data[key] = Cache(
-            data, None if self.lifetime is None and lifetime is None
-            else time() + (lifetime or self.lifetime) # type: ignore
+            data,
+            None
+            if self.lifetime is None and lifetime is None
+            else time() + (lifetime or self.lifetime),  # type: ignore
         )
 
     def __contains__(self, key: KeyT) -> bool:
@@ -99,7 +103,7 @@ class Cacher(Generic[KeyT, ValueT]):
         del self.data[key]
 
     def __delattr__(self, key: str) -> None:
-        del self[key] # type: ignore
+        del self[key]  # type: ignore
 
     def __setitem__(self, key: KeyT, value: ValueT) -> None:
         self.set(key, value)
@@ -113,8 +117,10 @@ class Cacher(Generic[KeyT, ValueT]):
             yield (key, value.data)
 
     def get(self, key: KeyT, default: Any = None) -> ValueT:
-        try: return self.data[key].data
-        except KeyError: return default
+        try:
+            return self.data[key].data
+        except KeyError:
+            return default
 
     def get_raw(self, key: KeyT) -> Cache[ValueT]:
         "データが格納されたCacheを取得します。"
@@ -138,8 +144,7 @@ class CacherPool(Thread):
         super().__init__(*args, **kwargs)
 
     def acquire(
-        self, lifetime: Optional[float] = None,
-        *args: Any, **kwargs: Any
+        self, lifetime: Optional[float] = None, *args: Any, **kwargs: Any
     ) -> Cacher[Any, Any]:
         "Cacherを生み出します。"
         self.cachers.append(Cacher(lifetime, *args, **kwargs))

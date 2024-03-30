@@ -1,15 +1,16 @@
-# rextlib - Utils
+__all__ = (
+    "make_error_message",
+    "make_simple_error_text",
+    "code_block",
+    "to_dict_for_dataclass",
+    "format_text",
+    "map_length",
+)
 
 from typing import TypeVar, Any
 from collections.abc import Callable, Iterator, Sized
 
 from traceback import TracebackException
-
-
-__all__ = (
-    "make_error_message", "make_simple_error_text", "code_block",
-    "to_dict_for_dataclass", "format_text", "map_length"
-)
 
 
 def make_error_message(error: Exception) -> str:
@@ -41,6 +42,8 @@ def format_text(text: dict[str, str], **kwargs: str) -> dict[str, str]:
 
 
 KeyT, ValueT = TypeVar("KeyT"), TypeVar("ValueT", bound=Sized)
+
+
 def map_length(data: dict[KeyT, ValueT]) -> Iterator[tuple[tuple[KeyT, ValueT], int]]:
     "渡された辞書の`.items`で返されるタプルと値の大きさの整数を入れたタプルを返すイテレーターを返します。"
     return map(lambda key: ((key, data[key]), len(data[key])), data.keys())

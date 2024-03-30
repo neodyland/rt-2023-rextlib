@@ -1,4 +1,4 @@
-# rextlib - JSON
+__all__ = ("dumps",)
 
 from orjson import dumps as odumps, loads
 
