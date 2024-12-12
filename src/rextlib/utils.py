@@ -13,9 +13,12 @@ from collections.abc import Callable, Iterator, Sized
 from traceback import TracebackException
 
 
-def make_error_message(error: Exception) -> str:
+def make_error_message(error: Exception, item = None) -> str:
     "渡されたエラーから全文を作ります。"
-    return "".join(TracebackException.from_exception(error).format())
+    error = "".join(TracebackException.from_exception(error).format())
+    if item:
+        error = "An exception occured in %r:\n" % item + error
+    return error
 
 
 def make_simple_error_text(error: Exception) -> str:
