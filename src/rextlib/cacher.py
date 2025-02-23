@@ -37,7 +37,8 @@ class Cache(Generic[DataT]):
         return str(self)
 
 
-KeyT, ValueT = TypeVar("KeyT", bound=Hashable), TypeVar("ValueT")
+KeyT = TypeVar("KeyT", bound=Hashable)
+ValueT = TypeVar("ValueT")
 
 
 class Cacher(Generic[KeyT, ValueT]):
