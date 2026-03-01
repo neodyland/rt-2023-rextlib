@@ -19,7 +19,7 @@ scripts = { make-rt-secret-key = "rextlib.make_key:main" }
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.rye]
+[tool.uv]
 managed = true
 
 [tool.hatch.metadata]
