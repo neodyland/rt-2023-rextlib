@@ -2,13 +2,12 @@
 name = "rt-2023-rextlib"
 version = "0.1.0"
 dependencies = [
-    "aiomysql~=0.2.0",
+    "aiomysql~=0.3.2",
     "cryptography~=41.0.3",
-    "orjson~=3.9.5",
+    "orjson~=3.11.7",
     "aiofiles>=23.2.1",
 ]
 authors = [
-    {name = "AoHaru I/O", email = "support@aoharu.io"},
     {name = "Neodyland", email = "support@neody.land"},
 ]
 requires-python = ">=3.11"
