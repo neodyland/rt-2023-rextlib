@@ -7,7 +7,7 @@ __all__ = (
     "map_length",
 )
 
-from typing import TypeVar, Any
+from typing import Any
 from collections.abc import Callable, Iterator, Sized
 
 from traceback import TracebackException
@@ -15,10 +15,10 @@ from traceback import TracebackException
 
 def make_error_message(error: Exception, item = None) -> str:
     "渡されたエラーから全文を作ります。"
-    error = "".join(TracebackException.from_exception(error).format())
+    error_str = "".join(TracebackException.from_exception(error).format())
     if item:
-        error = "An exception occured in %r:\n" % item + error
-    return error
+        error_str = "An exception occured in %r:\n" % item + error_str
+    return error_str
 
 
 def make_simple_error_text(error: Exception) -> str:
@@ -44,9 +44,8 @@ def format_text(text: dict[str, str], **kwargs: str) -> dict[str, str]:
     return text
 
 
-KeyT, ValueT = TypeVar("KeyT"), TypeVar("ValueT", bound=Sized)
-
-
-def map_length(data: dict[KeyT, ValueT]) -> Iterator[tuple[tuple[KeyT, ValueT], int]]:
+def map_length[KeyT, ValueT: Sized](
+        data: dict[KeyT, ValueT]
+) -> Iterator[tuple[tuple[KeyT, ValueT], int]]:
     "渡された辞書の`.items`で返されるタプルと値の大きさの整数を入れたタプルを返すイテレーターを返します。"
     return map(lambda key: ((key, data[key]), len(data[key])), data.keys())
