@@ -1,6 +1,6 @@
-__all__ = ("dumps",)
+__all__ = ("dumps", "loads")
 
-from orjson import dumps as odumps
+from orjson import dumps as odumps, loads
 
 
 dumps = lambda content, *args, **kwargs: odumps(content, *args, **kwargs).decode()
